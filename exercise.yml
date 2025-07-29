@@ -1,0 +1,3 @@
+name: "Node JS Artifact Repository"
+
+on: ["push", "pull_request"]
