@@ -77,7 +77,8 @@ jobs:
     steps:
       - name: print git Variables
         run: echo "${{ toJSON(github) }}"
+      - run: printenv
       - name: Print Environment Variables
         run: |
-          echo "API_URL=$API_URL"
-          echo "DB_NAME=$DB_NAME"
+          echo "API_URL=${API_URL}"
+          echo "DB_NAME=${DB_NAME}"
