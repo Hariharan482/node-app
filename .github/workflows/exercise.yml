@@ -25,9 +25,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-${{ matrix.node-version }}-build
-          path: |
-            dist/
-            Dockerfile
+          path: dist
 
   test:
     runs-on: ubuntu-latest
@@ -50,10 +48,38 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     needs: build
+    environment:
+      name: production
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: node-18-build
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Build Docker Image
+        run: docker build -t my-node-app:latest .
+      - name: Push Docker Image
+        run: docker push my-node-app:latest
       - name: list files
         run: ls -al
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    # environment:
+    # name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+    steps:
+      - name: print git Variables
+        run: echo ${github}
+      - run: echo "${github}"
+      - run: echo "${{github}}"
+      # - name: Print Environment Variables
+      #   run: |
+      #     echo "API_URL=${{ secrets.API_URL }}"
+      #     echo "DB_NAME=${{ secrets.DB_NAME }}"
