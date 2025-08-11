@@ -70,8 +70,8 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/my-node-app:latest
   deploy:
     runs-on: ubuntu-latest
-    needs: docker
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    needs: ["docker", "test"]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     environment:
     name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
     steps:
@@ -79,5 +79,5 @@ jobs:
         run: echo "${{ toJSON(github) }}"
       - name: Print Environment Variables
         run: |
-          echo "API_URL=${{ secrets.API_URL }}"
-          echo "DB_NAME=${{ secrets.DB_NAME }}"
+          echo "API_URL=${{ vars.API_URL }}"
+          echo "DB_NAME=${{ vars.DB_NAME }}"
