@@ -73,7 +73,7 @@ jobs:
     needs: ["docker", "test"]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     environment:
-    name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
     steps:
       - name: print git Variables
         run: echo "${{ toJSON(github) }}"
