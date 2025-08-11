@@ -81,4 +81,4 @@ jobs:
       - name: Print Environment Variables
         run: |
           echo "API_URL=${{ vars.API_URL }}"
-          echo "DB_NAME=${ vars.DB_NAME }}"
+          echo "DB_NAME=${{ vars.DB_NAME }}"
